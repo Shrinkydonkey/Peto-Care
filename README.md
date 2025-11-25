@@ -1,82 +1,96 @@
-🐾 Pet Adoption System
+# 🐾 Pet Adoption System
+
 A full-featured pet adoption web application built with Java Servlets, JSP, JDBC, and MySQL. It supports admin, shelter, and adopter dashboards for efficient pet management and adoption workflows.
 
-🚀 Features
-User Registration & Login (Admin, Shelter, Adopter roles)
+## 🚀 Features
 
-Admin Dashboard:
-User management, shelter management, pet management, adoption request tracking
+- User Registration & Login (Admin, Shelter, Adopter roles)
 
-Shelter Dashboard:
-Manage shelter info, add/edit pets, review requests
+### Admin Dashboard
+- User management
+- Shelter management
+- Pet management
+- Adoption request tracking
 
-Adopter Dashboard:
-Search pets, view own requests, track adoption status
+### Shelter Dashboard
+- Manage shelter info
+- Add/edit pets
+- Review requests
 
-Pet Management:
-Create/update/delete pets, search, filter, status (available/adopted/pending)
+### Adopter Dashboard
+- Search pets
+- View own requests
+- Track adoption status
 
-Adoption Request Workflow:
-Request pet adoption, approve/reject requests
+### Pet Management
+- Create/update/delete pets
+- Search and filter
+- Status: available / adopted / pending
 
-Responsive UI:
-Modern look using custom CSS styles and gradients
+### Adoption Request Workflow
+- Request pet adoption
+- Approve / reject requests
 
-📦 Tech Stack
-Backend: Java Servlet API, JSP
+### Responsive UI
+- Modern look using custom CSS styles and gradients
 
-Frontend: HTML, CSS (custom, clean and responsive)
+## 📦 Tech Stack
 
-Database: MySQL (JDBC)
+- Backend: Java Servlet API, JSP
+- Frontend: HTML, CSS (custom, responsive)
+- Database: MySQL (JDBC)
+- Server: Apache Tomcat 9.0+
+- Build: IntelliJ IDEA Artifacts / WAR packaging
+- Java Version: Java 8+
 
-Server: Apache Tomcat 9.0+
+## 🗃️ Directory Structure
 
-Build: IntelliJ IDEA Artifacts / WAR packaging
-
-Version: Java 8+
-
-🗃️ Directory Structure
-text
+```text
 PetAdoptionSystem/
 ├── src/
 │   └── main/
-│        ├── java/                 # Java classes (Servlets, DAO, Models)
-│        └── webapp/               # JSPs, static files
-│           └── WEB-INF/           # web.xml, classes, libraries
+│       ├── java/
+│       └── webapp/
+│           └── WEB-INF/
 ├── sql/
-│    └── schema.sql                # Database schema and sample data
-├── pom.xml / build.gradle         # (if using Maven/Gradle)
+│   └── schema.sql
+├── pom.xml / build.gradle
 └── README.md
-
+```
 
 🔧 Setup & Installation
-
+```
 1. Clone the repo
-bash
-git clone https://github.com/your-username/pet-adoption-system.git
-cd pet-adoption-system
+   
+    git clone https://github.com/your-username/pet-adoption-system.git
+    cd pet-adoption-system
 
-2. Set up MySQL
-Import sql/schema.sql in your MySQL DB.
+3. Set up MySQL
 
-Configure your database credentials in DAO classes.
+    Import sql/schema.sql
 
-3. Configure and Build Project
-Open in IntelliJ IDEA.
+    Configure DB credentials in DAO classes
 
-Build Artifact → Create WAR (check src/main/webapp is included in output).
+4. Configure and Build
 
-4. Deploy to Tomcat
-Copy the generated .war file into your Tomcat webapps folder.
+    Open project in IntelliJ IDEA
 
-Start Tomcat (startup.bat).
+    Build Artifact → Create WAR
 
-5. Access in Browser
-text
+5. Deploy to Tomcat
+
+    Copy .war to Tomcat webapps folder
+
+    Run startup.bat
+
+6. Access in browser
+
 http://localhost:8080/PetAdoptionSystem/home.jsp
+```
 
 🖥️ Screenshots
-![WhatsApp Image 2025-11-25 at 14 44 19_c723c173](https://github.com/user-attachments/assets/0abfb637-0026-4405-a50d-63d2c9d16375)
+
+![WhatsApp Image 2025-11-25 at 14 44 19_a9027658](https://github.com/user-attachments/assets/58a5e1a8-005b-4325-8c0f-016fd587a0e7)
 
 ![WhatsApp Image 2025-11-25 at 14 44 19_612ee921](https://github.com/user-attachments/assets/f3f45903-70d3-4fb6-b7f2-bb3237b62d01)
 
@@ -84,47 +98,50 @@ http://localhost:8080/PetAdoptionSystem/home.jsp
 
 ![WhatsApp Image 2025-11-25 at 14 44 19_10ad3bbb](https://github.com/user-attachments/assets/bc0e132a-82ae-480a-b757-1a0b567ce469)
 
-
 📝 Usage
-Roles:
-Admin: Manage all users, shelters, and pets
+Roles
 
-Shelter: Add/manage pets, respond to requests
+    Admin: Manage users, shelters, and pets
 
-Adopter: Search pets, request adoption
+    Shelter: Add/manage pets, respond to requests
 
-Authentication:
-Register and login according to role
+    Adopter: Search pets, request adoption
 
-Role-based dashboard is displayed upon login
+Authentication
+
+    Register and login according to role
+
+    Role-based dashboard shown after login
 
 🩹 Troubleshooting
-Common Issues:
+Common Issues
 
-404 on dashboard JSPs:
-Make sure all .jsp files are included in the WAR and deployed to Tomcat.
-Avoid naming conflicts (never use loop variable request in JSPs).
+404 errors
 
-JSP compile errors:
-See Tomcat logs for stack traces; resolve variable shadowing and uncaught exceptions.
+    Ensure JSP files are inside WAR
 
-Database errors:
-Make sure MySQL server is running. Check credentials/config in DAO classes.
+    Avoid using request as loop variable in JSP
 
-Session not working:
-Ensure correct attribute names (userId, userRole, etc.).
+JSP compile errors
 
-Debug Tips:
+    Check Tomcat logs
 
-Try direct access of JSPs to isolate deployment issues
+Database errors
 
-Print session variables at top of each dashboard JSP for testing
+    Ensure MySQL is running
+
+    Verify DB credentials in DAO classes
+
+Session issues
+
+    Check session attribute names (userId, userRole)
 
 💡 Contributing
-Pull requests welcome! Fork the repo and submit features, bug fixes, or UI improvements.
 
+Pull requests are welcome.
 📄 License
-MIT License. See LICENSE for details.
 
+MIT License
 🙋‍♂️ Author
+
 Piyush Samal
