@@ -13,7 +13,7 @@ public class DatabaseConnection {
     // Database credentials - UPDATE THESE WITH YOUR MYSQL DETAILS
     private static final String URL = "jdbc:mysql://localhost:3306/pet_adoption_db";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "Shrinkydonkey@123";
+    private static final String PASSWORD = "";
 
     static {
         try {
