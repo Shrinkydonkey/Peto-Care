@@ -113,6 +113,31 @@ Authentication
 
     Role-based dashboard shown after login
 
+🔐 Adoption Request Transaction Handling
+
+To prevent multiple users from adopting the same pet simultaneously, the adoption process is implemented using a single atomic database transaction.
+
+During adoption:
+
+    1. The system checks whether the pet is still available.
+
+    2. If available, an adoption request is created.
+
+    3. The pet’s status is updated immediately.
+
+All three steps execute within one database transaction.
+If any step fails, the transaction is rolled back to ensure data consistency and prevent double adoption.
+
+This logic is implemented in AdoptionRequestDAO.createAdoptionRequestAtomic() using manual transaction control and row-level locking.
+
+✅ Validation & Error Handling
+
+    1. Server-side validation ensures invalid or tampered requests are rejected.
+
+    2. Client-side validation improves user experience.
+
+    3. All database operations are wrapped with proper error handling to avoid system crashes.
+
 🩹 Troubleshooting
 Common Issues
 

@@ -242,4 +242,58 @@ public class AdoptionRequestDAO {
         request.setCreatedAt(rs.getTimestamp("created_at"));
         return request;
     }
+
+    public boolean createAdoptionRequestAtomic(
+        int userId,
+        int petId
+    ) {
+        Connection conn = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            conn.setAutoCommit(false); // 🔑 START TRANSACTION
+
+            // 1️⃣ Check pet availability
+            String checkSql = "SELECT status FROM pets WHERE pet_id = ? FOR UPDATE";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setInt(1, petId);
+
+            ResultSet rs = checkStmt.executeQuery();
+            if (!rs.next() || !"AVAILABLE".equals(rs.getString("status"))) {
+                conn.rollback();
+                return false;
+            }
+
+            // 2️⃣ Insert adoption request
+            String insertSql =
+                    "INSERT INTO adoption_requests (user_id, pet_id, status) VALUES (?, ?, 'PENDING')";
+            PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+            insertStmt.setInt(1, userId);
+            insertStmt.setInt(2, petId);
+            insertStmt.executeUpdate();
+
+            // 3️⃣ Update pet status
+            String updateSql = "UPDATE pets SET status = 'ADOPTED' WHERE pet_id = ?";
+            PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+            updateStmt.setInt(1, petId);
+            updateStmt.executeUpdate();
+
+            conn.commit(); // ✅ ALL SUCCESS
+            return true;
+
+        } catch (Exception e) {
+            try {
+                if (conn != null) conn.rollback(); // ❌ FAILURE → ROLLBACK
+            } catch (SQLException ignored) {}
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            try {
+                if (conn != null) conn.setAutoCommit(true);
+                if (conn != null) conn.close();
+            } catch (SQLException ignored) {}
+        }
+    }
+
 }

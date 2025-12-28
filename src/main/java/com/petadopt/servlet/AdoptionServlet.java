@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import com.petadopt.util.ErrorHandler;
+
 
 /**
  * Adoption Request Management Servlet
@@ -70,31 +72,50 @@ public class AdoptionServlet extends HttpServlet {
             return;
         }
 
-        int petId = Integer.parseInt(request.getParameter("petId"));
+        String petIdParam = request.getParameter("petId");
+        int petId;
 
-        // Check if already applied
-        if (requestDAO.hasPendingRequest(petId, userId)) {
-            request.setAttribute("error", "You have already applied for this pet!");
-            response.sendRedirect("pets?action=view&id=" + petId);
+        if (petIdParam == null || petIdParam.isEmpty()) {
+            request.setAttribute("error", "Invalid pet selection.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
             return;
         }
 
-        AdoptionRequest adoptionRequest = new AdoptionRequest();
-        adoptionRequest.setPetId(petId);
-        adoptionRequest.setAdopterId(userId);
-        adoptionRequest.setStatus("pending");
-
-        boolean created = requestDAO.createRequest(adoptionRequest);
-
-        if (created) {
-            // Update pet status to pending
-            petDAO.updatePetStatus(petId, "pending");
-            request.setAttribute("success", "Application submitted successfully!");
-        } else {
-            request.setAttribute("error", "Failed to submit application!");
+        try {
+            petId = Integer.parseInt(petIdParam);
+            if (petId <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid pet ID.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
         }
 
-        response.sendRedirect("adopter-dashboard.jsp");
+
+        boolean success;
+
+        try {
+            success = requestDAO.createAdoptionRequestAtomic(userId, petId);
+        } catch (Exception e) {
+            ErrorHandler.handleError(
+                request,
+                "Something went wrong while processing adoption. Please try again.",
+                e
+            );
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
+        }
+
+
+        if (success) {
+            response.sendRedirect("adopter-dashboard.jsp");
+        } else {
+            request.setAttribute("error", "Pet is no longer available or already applied.");
+            request.getRequestDispatcher("pets?action=view&id=" + petId)
+                .forward(request, response);
+        }
+
     }
 
     private void updateRequestStatus(HttpServletRequest request, HttpServletResponse response) 
